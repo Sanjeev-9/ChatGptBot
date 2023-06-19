@@ -246,7 +246,7 @@ for (const record of Recordsdf) {
   const loadingMessage = { name: 'Sanjeev', message: 'Loading...' };
   this.messages.push(loadingMessage);
   this.updateChatText(chatbox);
-      fetch('/predict', {
+      fetch('http://127.0.0.1:5000/predict', {
         method: 'POST',
         body: JSON.stringify({ message: text }),
         mode: 'cors',
