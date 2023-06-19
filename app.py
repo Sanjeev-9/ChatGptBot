@@ -11,7 +11,7 @@ def index_get():
     return render_template("base.html")
 
 
-@app.route("/predict",methods=["POST"])
+@app.route("https://sanjeev-9.github.io/ChatGptBot/predict",methods=["POST"])
 def predict():
     text = request.get_json().get("message")
     response = get_response(text)
