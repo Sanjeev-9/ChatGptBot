@@ -5,10 +5,8 @@ import APIcode
 from chat import get_response
 
 app = Flask(__name__)
-CORS(app)
-@app.route("/",methods=['GET'])
-def index_get():
-    return render_template("base.html")
+app.debug = False
+app._static_folder = os.path.abspath("static/")
 
 
 @app.route("/predict",methods=["POST"])
@@ -47,6 +45,4 @@ def submitForm():
 
 
 if __name__=="__main__":
-    #app.run(debug=True)
-    app.run(host='0.0.0.0',port='90890',debug=True)
-    #(http://127.0.0.1:25354,http://192.168.43.7:25354)
+    app.run(host="0.0.0.0", port=5000)
