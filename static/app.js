@@ -239,49 +239,50 @@ for (const record of Recordsdf) {
 
     //Chatgpt Section
     else {
-      const msg13 = { name: 'User', message: text };
-      this.messages.push(msg13);
-      this.updateChatText(chatbox);
-      // Show loading message
+  const userMessage = { name: 'User', message: text };
+  this.messages.push(userMessage);
+  this.updateChatText(chatbox);
+  // Show loading message
   const loadingMessage = { name: 'Sanjeev', message: 'Loading...' };
   this.messages.push(loadingMessage);
   this.updateChatText(chatbox);
 
+  const self = this; // Store reference to 'this'
 
-      $.ajax({
-  url: '/predict',
-  type: 'POST',
-  data: JSON.stringify({ message: text }),
-  dataType: 'json',
-  contentType: 'application/json',
-})
-  .done(function(response) {
-    // Remove the loading message from the messages array
-    const loadingIndex = this.messages.findIndex(function(msg) {
-      return msg.message === 'Loading...';
-    });
-    if (loadingIndex !== -1) {
-      this.messages.splice(loadingIndex, 1);
-    }
-
-    // Handle the response
-    console.log(response);
-
-     const message = { name: 'Sanjeev', message: response };
-            this.messages.push(message);
-            this.updateChatText(chatbox);
-            textField.value = '';
+  $.ajax({
+    url: '/predict',
+    type: 'POST',
+    data: JSON.stringify({ message: text }),
+    dataType: 'json',
+    contentType: 'application/json',
   })
-  .fail(function(jqXHR, textStatus, errorThrown) {
-    console.error('Error:', errorThrown);
-  });
+    .done(function (response) {
+      // Remove the loading message from the messages array
+      const loadingIndex = self.messages.findIndex(function (msg) {
+        return msg.message === 'Loading...';
+      });
+      if (loadingIndex !== -1) {
+        self.messages.splice(loadingIndex, 1);
+      }
 
-        .catch((error) => {
-          console.error('Error:', error);
-          this.updateChatText(chatbox);
-          textField.value = '';
-        });
-    }
+      // Handle the response
+      console.log(response);
+
+      const message = { name: 'Sanjeev', message: response };
+      self.messages.push(message);
+      self.updateChatText(chatbox);
+      textField.value = '';
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error('Error:', errorThrown);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      self.updateChatText(chatbox);
+      textField.value = '';
+    });
+}
+
     // Start the chat loop again
     this.startChatLoop();
 
