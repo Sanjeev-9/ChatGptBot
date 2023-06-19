@@ -246,26 +246,36 @@ for (const record of Recordsdf) {
   const loadingMessage = { name: 'Sanjeev', message: 'Loading...' };
   this.messages.push(loadingMessage);
   this.updateChatText(chatbox);
-      fetch('https://sanjeev-9.github.io/ChatGptBot/predict', {
-        method: 'POST',
-        body: JSON.stringify({ message: text }),
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then((r) => r.json())
-        .then((r) => {
-        // Remove the loading message from the messages array
-      const loadingIndex = this.messages.findIndex((msg) => msg.message === 'Loading...');
-      if (loadingIndex !== -1) {
-        this.messages.splice(loadingIndex, 1);
-      }
-          const msg14 = { name: 'Sanjeev', message: r.answer };
-          this.messages.push(msg14);
-          this.updateChatText(chatbox);
-          textField.value = '';
-      })
+
+
+      $.ajax({
+  url: '/predict',
+  type: 'POST',
+  data: JSON.stringify({ message: text }),
+  dataType: 'json',
+  contentType: 'application/json',
+})
+  .done(function(response) {
+    // Remove the loading message from the messages array
+    const loadingIndex = this.messages.findIndex(function(msg) {
+      return msg.message === 'Loading...';
+    });
+    if (loadingIndex !== -1) {
+      this.messages.splice(loadingIndex, 1);
+    }
+
+    // Handle the response
+    console.log(response);
+
+     const message = { name: 'Sanjeev', message: response };
+            this.messages.push(message);
+            this.updateChatText(chatbox);
+            textField.value = '';
+  })
+  .fail(function(jqXHR, textStatus, errorThrown) {
+    console.error('Error:', errorThrown);
+  });
+
         .catch((error) => {
           console.error('Error:', error);
           this.updateChatText(chatbox);
